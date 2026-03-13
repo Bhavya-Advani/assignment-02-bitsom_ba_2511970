@@ -1,0 +1,27 @@
+part1-rdbms/schema_design.sql
+datasets/orders_flat.csv
+datasets/retail_transactions.csv
+datasets/customers.csv
+datasets/orders.json
+datasets/products.parquet
+part1-rdbms/queries.sql
+part1-rdbms/normalization.md
+part2-nosql/mongo_queries.js
+part2-nosql/sample_documents.json
+part2-nosql/rdbms_vs_nosql.md
+part3-datawarehouse/star_schema.sql
+part3-datawarehouse/dw_queries.sql
+part3-datawarehouse/etl_notes.md
+part4-vector-db/embeddings_demo.ipynb
+part4-vector-db/vector_db_reflection.md
+part5-datalake/duckdb_queries.sql
+part5-datalake/architecture_choice.md
+part6-capstone/architecture_diagram.png
+part6-capstone/design_justification.md
+Add file → Upload files
+orders_flat.csv
+retail_transactions.csv
+customers.csv
+orders.json
+products.parquet
+README.md 
