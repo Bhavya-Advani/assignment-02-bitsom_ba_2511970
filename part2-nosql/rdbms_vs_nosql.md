@@ -49,28 +49,28 @@ db.products.insertMany([
   }
 ]);
 
-##OP2: find() — Electronics products with price > 20000
+## OP2: find() — Electronics products with price > 20000
 
 db.products.find({
   category: "Electronics",
   price: { $gt: 20000 }
 });
 
-##OP3: find() — Groceries expiring before 2025-01-01
+## OP3: find() — Groceries expiring before 2025-01-01
 
 db.products.find({
   category: "Groceries",
   expiry_date: { $lt: new Date("2025-01-01") }
 });
 
-##OP4: updateOne() — add discount_percent field
+## OP4: updateOne() — add discount_percent field
 
 db.products.updateOne(
   { _id: "E101" },
   { $set: { discount_percent: 10 } }
 );
 
-##OP5: createIndex() — index on category
+## OP5: createIndex() — index on category
 
 db.products.createIndex({ category: 1 });
 
