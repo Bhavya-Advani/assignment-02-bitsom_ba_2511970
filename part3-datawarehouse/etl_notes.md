@@ -22,13 +22,25 @@ ORDER BY store_total_revenue DESC
 LIMIT 2;
 
 ##Q3: Month-over-month sales trend across all stores
+
+WITH monthly_sales AS (
+    SELECT 
+        d.year,
+        d.month,
+        d.month_name,
+        SUM(f.total_sales) AS monthly_revenue
+    FROM fact_sales f
+    JOIN dim_date d ON f.date_id = d.date_id
+    GROUP BY d.year, d.month, d.month_name
+)
+
 SELECT 
-    d.month_name,
-    SUM(f.total_revenue) AS current_month_revenue,
-    LAG(SUM(f.total_revenue)) OVER (ORDER BY d.year, d.month) AS previous_month_revenue,
-    ROUND(((SUM(f.total_revenue) - LAG(SUM(f.total_revenue)) OVER (ORDER BY d.year, d.month)) / 
-    LAG(SUM(f.total_revenue)) OVER (ORDER BY d.year, d.month)) * 100, 2) AS mom_growth_percentage
-FROM fact_sales f
-JOIN dim_date d ON f.date_id = d.date_id
-GROUP BY d.year, d.month, d.month_name
-ORDER BY d.year, d.month;
+    month_name,
+    monthly_revenue AS current_month_revenue,
+    LAG(monthly_revenue) OVER (ORDER BY year, month) AS previous_month_revenue,
+    ROUND(
+        ((monthly_revenue - LAG(monthly_revenue) OVER (ORDER BY year, month)) 
+        / LAG(monthly_revenue) OVER (ORDER BY year, month)) * 100, 
+    2) AS mom_growth_percentage
+FROM monthly_sales
+ORDER BY year, month;
