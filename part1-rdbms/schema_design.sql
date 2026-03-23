@@ -1,27 +1,53 @@
-part1-rdbms/schema_design.sql
-datasets/orders_flat.csv
-datasets/retail_transactions.csv
-datasets/customers.csv
-datasets/orders.json
-datasets/products.parquet
-part1-rdbms/queries.sql
-part1-rdbms/normalization.md
-part2-nosql/mongo_queries.js
-part2-nosql/sample_documents.json
-part2-nosql/rdbms_vs_nosql.md
-part3-datawarehouse/star_schema.sql
-part3-datawarehouse/dw_queries.sql
-part3-datawarehouse/etl_notes.md
-part4-vector-db/embeddings_demo.ipynb
-part4-vector-db/vector_db_reflection.md
-part5-datalake/duckdb_queries.sql
-part5-datalake/architecture_choice.md
-part6-capstone/architecture_diagram.png
-part6-capstone/design_justification.md
-Add file → Upload files
-orders_flat.csv
-retail_transactions.csv
-customers.csv
-orders.json
-products.parquet
-README.md 
+##Q1: List all customers from Mumbai along with their total order value
+
+SELECT 
+c.customer_name,
+SUM(p.unit_price * oi.quantity) AS total_order_value
+FROM customers c
+JOIN orders o ON c.customer_id = o.customer_id
+JOIN order_items oi ON o.order_id = oi.order_id
+JOIN products p ON oi.product_id = p.product_id
+WHERE c.customer_city = 'Mumbai'
+GROUP BY c.customer_name;
+
+##Q2: Find the top 3 products by total quantity sold
+
+SELECT 
+p.product_name,
+SUM(oi.quantity) AS total_quantity
+FROM order_items oi
+JOIN products p ON oi.product_id = p.product_id
+GROUP BY p.product_name
+ORDER BY total_quantity DESC
+LIMIT 3;
+
+
+##Q3: List all sales representatives and the number of unique customers they have handled
+
+SELECT 
+s.sales_rep_name,
+COUNT(DISTINCT o.customer_id) AS unique_customers
+FROM sales_reps s
+LEFT JOIN orders o ON s.sales_rep_id = o.sales_rep_id
+GROUP BY s.sales_rep_name;
+
+##Q4: Find all orders where the total value exceeds 10000, sorted by value descending
+
+SELECT 
+o.order_id,
+SUM(p.unit_price * oi.quantity) AS order_value
+FROM orders o
+JOIN order_items oi ON o.order_id = oi.order_id
+JOIN products p ON oi.product_id = p.product_id
+GROUP BY o.order_id
+HAVING order_value > 10000
+ORDER BY order_value DESC;
+
+##Q5: Identify any products that have never been ordered
+
+SELECT 
+p.product_name
+FROM products p
+LEFT JOIN order_items oi
+ON p.product_id = oi.product_id
+WHERE oi.product_id IS NULL;
